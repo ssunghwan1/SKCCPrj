@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sample">
+	<select id="selectBoardList" parameterType="hashmap" resultType="hashmap">
+		SELECT
+		*
+		FROM
+		MEMBER
+		WHERE ID =#{Id}
+	</select>
+	<select id="selectContract" parameterType="hashmap" resultType="hashmap">
+		SELECT * FROM TBPET A
+		INNER JOIN TBCONTRACT B
+		ON B.PETSEQ = A.SEQ
+		WHERE OWNERID = #{Id}
+	</select>
+
+	<select id="selectPetList" parameterType="hashmap" resultType="hashmap">
+		SELECT
+		*
+		FROM TBPET
+		WHERE 1 = 1
+		<if test="Id != null and Id != ''">
+			AND ID = #{Id}
+		</if>
+		<if test="Address1 != null and Address1 != ''">
+			AND ADDRESS1 = #{Address1}
+		</if>
+		<if test="Address2 != null and Address2 != ''">
+			AND ADDRESS2 = #{Address2}
+		</if>
+		<if test="Seq != null and Seq != ''">
+			AND SEQ = #{Seq}
+		</if>
+	</select>
+	<select id="selectPetDetail" parameterType="hashmap" resultType="hashmap">
+		SELECT
+		*
+		FROM TBPET
+		<if test="seq != null and seq != ''">
+			WHERE seq = #{seq}
+		</if>
+	</select>
+	<select id="selectReqPet" parameterType="hashmap" resultType="hashmap">
+		SELECT
+		*
+		FROM TBREQPET
+		WHERE 1 = 1
+		<if test="Seq != null and Seq != ''">
+			AND Seq = #{Seq}
+		</if>
+		<if test="Id != null and Id != ''">
+			AND Id = #{Id}
+		</if>
+	</select>
+	<select id="selectReqPet2" parameterType="hashmap" resultType="hashmap">
+		SELECT *
+		FROM TBPET A
+        INNER JOIN TBREQPET B 
+        ON B.PETSEQ = A.SEQ 
+		WHERE B.ID = #{Id}
+	</select>
+	<insert id="insertPet" parameterType="hashmap">
+		INSERT INTO TBPET(
+		ID,
+		PETNAME,
+		AGE,
+		GENDER,
+		NEUTRAL,
+		DEPOSIT,
+		STARTDATE,
+		ENDDATE,
+		IMGPATH1,
+		IMGPATH2,
+		IMGPATH3,
+		DESCRIPTION,
+		STATUSVALUE,
+		BREEDS,
+		ADDRESS1,
+		ADDRESS2)
+		VALUES(
+		#{Id},
+		#{PetName},
+		#{Age},
+		#{Gender},
+		#{Neutral},
+		#{Deposit},
+		#{StartDate},
+		#{EndDate},
+		#{ImgPath1},
+		#{ImgPath2},
+		#{ImgPath3},
+		#{Description},
+		#{StatusValue},
+		#{Breeds},
+		#{Address1},
+		#{Address2});
+	</insert>
+	<insert id="insertContract" parameterType="hashmap">
+		INSERT INTO
+		TBCONTRACT(
+		PETSEQ,
+		OWNERID,
+		PREOWNERID)
+		VALUES(
+		#{PetSeq},
+		#{OwnerId},
+		#{PreOwnerId}
+		);
+	</insert>
+	<insert id="insertReqPet" parameterType="hashmap">
+		INSERT INTO TBREQPET(
+		ID,
+		PETSEQ,
+		REQNAME,
+		PHONENUM,
+		JOB,
+		FAMILYNUM,
+		COMMENTDESC,
+		EXPERIENCE
+		)
+		VALUES(
+		#{Id},
+		#{PetSeq},
+		#{ReqName},
+		#{PhoneNum},
+		#{Job},
+		#{FamilyNum},
+		#{CommentDesc},
+		#{Experience}
+		)
+	</insert>
+	<update id="updatePet" parameterType="hashmap">
+		UPDATE TBPET
+		<set>
+			<if test="statusvalue !=null and statusvalue != ''">
+				statusvalue = #{statusvalue},
+			</if>
+		</set>
+		<where>
+			seq = #{seq}
+		</where>
+	</update>
+	<update id="updateRequestCnt" parameterType="hashmap">
+		UPDATE TBPET
+		<set>
+			REQUESTCNT = REQUESTCNT +1
+		</set>
+		<where>
+			SEQ = #{seq}
+		</where>
+	</update>
+</mapper>

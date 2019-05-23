@@ -21,8 +21,8 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<context:component-scan base-package="com.skcc.main" />
+	<context:component-scan base-package="com.skcc" />
 	
-	
+	<beans:bean id= "jacksonMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"/>
 	
 </beans:beans>
